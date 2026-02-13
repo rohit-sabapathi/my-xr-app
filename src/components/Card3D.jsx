@@ -17,7 +17,7 @@ export default function Card3D() {
         setColor(color === "red" ? "hotpink" : "red")
       }
     >
-      <boxGeometry args={[2, 3, 0.2]} />
+      <boxGeometry args={[1, 2, 0.1]} />
       <meshStandardMaterial color={color} />
     </mesh>
   );

@@ -1,50 +1,61 @@
 import { Canvas } from "@react-three/fiber";
 import { XR, createXRStore } from "@react-three/xr";
-import { OrbitControls } from "@react-three/drei";
-import Card3D from "./components/Card3D";
-import { Float } from "@react-three/drei";
+import { Stars } from "@react-three/drei";
+import { useState } from "react";
+import SolarSystem from "./components/SolarSystem";
 
 const store = createXRStore();
 
 export default function App() {
+  const [scale, setScale] = useState(1);
+
   return (
     <>
-      {/* AR Button */}
-      <button
-        onClick={() => store.enterAR()}
-        style={{
-          position: "absolute",
-          top: 20,
-          left: 20,
-          zIndex: 1,
-          padding: "10px 15px",
-          background: "black",
-          color: "white",
-          borderRadius: "8px",
-          border: "none",
-        }}
-      >
+      <button onClick={() => store.enterAR()} style={btn(20)}>
         Enter AR
+      </button>
+
+      <button onClick={() => setScale(s => s + 0.2)} style={btn(80)}>
+        +
+      </button>
+
+      <button onClick={() => setScale(s => Math.max(0.2, s - 0.2))} style={btn(130)}>
+        -
       </button>
 
       <Canvas style={{ height: "100vh" }}>
         <XR store={store}>
-          {/* Lights */}
+          {/* Lighting */}
+
           <ambientLight intensity={0.8} />
-          <directionalLight position={[5, 5, 5]} />
 
-          {/* Place object slightly in front */}
-          <group position={[0, 0, -2]}>
-            <Card3D />
+<pointLight 
+  position={[0, 0, 0]} 
+  intensity={5} 
+  distance={20}
+/>
+
+          {/* Stars */}
+          <Stars radius={20} depth={40} count={10000} factor={6} />
+
+          {/* System */}
+          <group position={[0, 0, -3]} scale={[scale, scale, scale]}>
+            <SolarSystem />
           </group>
-
-          {/* Optional (disable if issues) */}
-          <OrbitControls />
         </XR>
-        <Float speed={2} rotationIntensity={1}>
-  <Card3D />
-</Float>
       </Canvas>
     </>
   );
 }
+
+const btn = (top) => ({
+  position: "absolute",
+  top,
+  left: 20,
+  zIndex: 1,
+  padding: "10px",
+  background: "#111",
+  color: "white",
+  borderRadius: "8px",
+  border: "none"
+});
