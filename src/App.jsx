@@ -1,35 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Canvas } from "@react-three/fiber";
+import { XR, createXRStore } from "@react-three/xr";
+import { OrbitControls } from "@react-three/drei";
+import Card3D from "./components/Card3D";
 
-function App() {
-  const [count, setCount] = useState(0)
+const store = createXRStore();
 
+export default function App() {
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+      {/* AR Button */}
+      <button
+        onClick={() => store.enterAR()}
+        style={{
+          position: "absolute",
+          top: 20,
+          left: 20,
+          zIndex: 1,
+          padding: "10px 15px",
+          background: "black",
+          color: "white",
+          borderRadius: "8px",
+          border: "none",
+        }}
+      >
+        Enter AR
+      </button>
 
-export default App
+      <Canvas style={{ height: "100vh" }}>
+        <XR store={store}>
+          {/* Lights */}
+          <ambientLight intensity={0.8} />
+          <directionalLight position={[5, 5, 5]} />
+
+          {/* Place object slightly in front */}
+          <group position={[0, 0, -2]}>
+            <Card3D />
+          </group>
+
+          {/* Optional (disable if issues) */}
+          <OrbitControls />
+        </XR>
+      </Canvas>
+    </>
+  );
+}
