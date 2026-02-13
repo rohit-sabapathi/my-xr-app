@@ -2,6 +2,7 @@ import { Canvas } from "@react-three/fiber";
 import { XR, createXRStore } from "@react-three/xr";
 import { OrbitControls } from "@react-three/drei";
 import Card3D from "./components/Card3D";
+import { Float } from "@react-three/drei";
 
 const store = createXRStore();
 
@@ -40,6 +41,9 @@ export default function App() {
           {/* Optional (disable if issues) */}
           <OrbitControls />
         </XR>
+        <Float speed={2} rotationIntensity={1}>
+  <Card3D />
+</Float>
       </Canvas>
     </>
   );
